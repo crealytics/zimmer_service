@@ -1,0 +1,55 @@
+version: '2'
+services:
+  zimmer_service_postgres:
+    image: postgres:9.5
+    container_name: zimmer_service_postgres
+    env_file: .env
+    environment:
+      POSTGRES_USER: zimmer_service
+      POSTGRES_PASSWORD: zimmer_service
+    ports:
+      - localhost:$ZIMMER_SERVICE_POSTGRES_PORT:5432
+
+  #################### Base  ####################
+
+  base: &base
+    build: .
+    env_file: .env
+    links:
+      - zimmer_service_postgres:postgres
+    volumes:
+      - .:/home/app/zimmer_service
+      - zimmer_service_gems_2_4_0:/usr/local/bundle
+
+  #################### CONTAINERS ####################
+
+  zimmer_service_app:
+    <<: *base
+    container_name: zimmer_service_app
+    command: /bin/bash bin/server.sh
+    ports:
+      - :3000:3000
+    environment:
+      - RAILS_ENV=development
+      - ZIMMER_SERVICE_POSTGRES_PORT=5432
+
+  zimmer_service_tests:
+    <<: *base
+    container_name: zimmer_service_tests
+    command: /bin/bash bin/tests.sh
+    environment:
+      - RAILS_ENV=test
+
+  zimmer_service_root:
+    <<: *base
+    user: root
+    container_name: zimmer_service_root
+    command: /bin/bash
+
+networks:
+  default:
+    external:
+      name: zimmer_service
+
+volumes:
+  zimmer_service_gems_2_4_0:
