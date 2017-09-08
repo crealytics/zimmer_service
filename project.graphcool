@@ -1,5 +1,5 @@
 # project: cj7btvgaf1wgu0194omauylgp
-# version: 1
+# version: 20
 
 type File implements Node {
   contentType: String!
@@ -13,6 +13,25 @@ type File implements Node {
 }
 
 type User implements Node {
+  createdAt: DateTime!
+  id: ID! @isUnique
+  updatedAt: DateTime!
+}
+
+type Room implements Node {
+  name: String!
+  identifier: String! @isUnique
+  bookings: [Booking!]! @relation(name: "BookingOnRoom")
+  createdAt: DateTime!
+  id: ID! @isUnique
+  updatedAt: DateTime!
+  availableForBooking: Boolean
+}
+
+type Booking implements Node {
+  start: DateTime!
+  end: DateTime!
+  room: Room! @relation(name: "BookingOnRoom")
   createdAt: DateTime!
   id: ID! @isUnique
   updatedAt: DateTime!
