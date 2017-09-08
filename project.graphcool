@@ -1,5 +1,5 @@
 # project: cj7btvgaf1wgu0194omauylgp
-# version: 2
+# version: 20
 
 type File implements Node {
   contentType: String!
@@ -25,6 +25,7 @@ type Room implements Node {
   createdAt: DateTime!
   id: ID! @isUnique
   updatedAt: DateTime!
+  availableForBooking: Boolean
 }
 
 type Booking implements Node {
