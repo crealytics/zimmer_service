@@ -1,0 +1,17 @@
+version: '3'
+services:
+  web:
+    image: node
+    command: yarn start
+    working_dir: /rad-ui
+    volumes:
+      - .:/rad-ui
+    ports:
+      - "4200:4200"
+
+  console:
+    image: node
+    command: bash -c 'npm install -g ember-cli && /bin/bash'
+    working_dir: /rad-ui
+    volumes:
+      - .:/rad-ui
