@@ -2,7 +2,7 @@ version: '3'
 services:
   web:
     image: node
-    command: yarn start
+    command: bash -c "npm install && yarn start"
     working_dir: /app
     volumes:
       - .:/app
