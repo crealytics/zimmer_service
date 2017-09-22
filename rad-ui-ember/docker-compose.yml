@@ -7,7 +7,8 @@ services:
     volumes:
       - .:/rad-ui
     ports:
-      - "4200:4200"
+      - 4200:4200
+      - 49153:49153
 
   console:
     image: node
