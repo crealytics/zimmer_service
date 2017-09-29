@@ -38,7 +38,6 @@ export default Ember.Service.extend({
       this.get('apollo')
 				.query( {query: whoAmI}, 'user' )
         .then(result => {
-					console.log(result);
 					this.setUserId(result.id);
           resolve();
       })
