@@ -2,12 +2,13 @@ version: '3'
 services:
   web:
     image: node
-    command: yarn start
+    command: bash -c 'npm install && yarn start'
     working_dir: /rad-ui
     volumes:
       - .:/rad-ui
     ports:
-      - "4200:4200"
+      - 4200:4200
+      - 49153:49153
 
   console:
     image: node

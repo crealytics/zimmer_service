@@ -1,0 +1,16 @@
+<div>
+  {{#if userLoggedIn}}
+    Wooot!
+  {{ else }}
+    <h4 class='mv3'>
+      Sign In
+    </h4>
+    <form {{action 'signIn' on='submit'}} class='flex flex-column'>
+      {{input type='text' class='mb2' placeholder='Your email address' value=email}}
+      {{input type='password' class='mb2' placeholder='Choose a safe password' value=password}}
+      <div class='flex'>
+        {{input type='submit' class='mr2' value='Sign In'}}
+      </div>
+    </form>
+  {{/if}}
+</div>
