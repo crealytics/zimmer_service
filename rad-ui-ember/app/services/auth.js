@@ -30,18 +30,16 @@ export default Ember.Service.extend({
       this.get('apollo')
         .mutate({ mutation: signInUser, variables }, 'signinUser')
         .then(result => {
-					this.setAuthToken(result.token);
-          resolve();
-      })
-      .catch(error => reject(error));
-
-      this.get('apollo')
-				.query( {query: whoAmI}, 'user' )
-        .then(result => {
-					this.setUserId(result.id);
-          resolve();
-      })
-      .catch(error => reject(error));
+          this.setAuthToken(result.token);
+          this.get('apollo')
+            .query( {query: whoAmI}, 'user' )
+            .then(result => {
+              this.setUserId(result.id);
+              resolve()
+            })
+            .catch(error => reject(error));
+        })
+        .catch(error => reject(error));
     });
   },
 
