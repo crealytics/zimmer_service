@@ -2,25 +2,14 @@ import Ember from 'ember';
 
 import RSVP from 'rsvp';
 import signInUser from 'rad-ui/graphql/mutations/signInUser';
-import whoAmI from 'rad-ui/graphql/queries/whoAmI';
 
-const GC_USER_ID = 'graphcool-user-id';
 const GC_AUTH_TOKEN = 'graphcool-auth-token';
 
 export default Ember.Service.extend({
   apollo: Ember.inject.service(),
 
-  authToken: null,
-  userId: null,
-
-  init() {
-    this._super(...arguments);
-    this.getUserId();
-    this.getAuthToken();
-  },
-
-  isSignedIn: Ember.computed('userId', function() {
-    return !!this.get('userId');
+  isSignedIn: Ember.computed('authToken', function() {
+    return !!this.get('authToken');
   }),
 
   signIn(email, password) {
@@ -29,62 +18,33 @@ export default Ember.Service.extend({
       variables = { email, password };
       this.get('apollo')
         .mutate({ mutation: signInUser, variables }, 'signinUser')
-        .then(result => {
-          this.setAuthToken(result.token);
-          this.get('apollo')
-            .query( {query: whoAmI}, 'user' )
-            .then(result => {
-              this.setUserId(result.id);
-              resolve()
-            })
-            .catch(error => reject(error));
-        })
+        .then(result => { this.set('authToken', result.token); })
         .catch(error => reject(error));
     });
   },
 
   signOut() {
     return new RSVP.Promise(resolve => {
-      this.removeUserId();
       this.removeAuthToken();
       resolve();
     });
   },
 
-  saveUserData(id, token) {
-    this.setUserId(id);
-    this.setAuthToken(token);
-  },
-
-  getUserId() {
-    const userId = localStorage.getItem(GC_USER_ID);
-    this.setUserId(userId);
-    return userId;
-  },
-
-  getAuthToken() {
-    const token = localStorage.getItem(GC_AUTH_TOKEN);
-    this.setAuthToken(token);
-    return token;
-  },
-
-  removeUserId() {
-    localStorage.removeItem(GC_USER_ID);
-    this.set('userId', null);
-  },
+  authToken: Ember.computed({
+    get() {
+      return localStorage.getItem(GC_AUTH_TOKEN);
+    },
+    set(_, value) {
+      if(value) {
+        localStorage.setItem(GC_AUTH_TOKEN, value);
+      } else {
+        localStorage.removeItem(GC_AUTH_TOKEN);
+      }
+      return value;
+    }
+  }),
 
   removeAuthToken() {
-    localStorage.removeItem(GC_AUTH_TOKEN);
     this.set('authToken', null);
-  },
-
-  setUserId(id) {
-    localStorage.setItem(GC_USER_ID, id);
-    this.set('userId', id);
-  },
-
-  setAuthToken(token) {
-    localStorage.setItem(GC_AUTH_TOKEN, token);
-    this.set('authToken', token);
   }
 });
