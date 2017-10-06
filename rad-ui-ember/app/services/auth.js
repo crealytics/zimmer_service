@@ -7,10 +7,9 @@ const GC_AUTH_TOKEN = 'graphcool-auth-token';
 
 export default Ember.Service.extend({
   apollo: Ember.inject.service(),
-  _auth_token: null,
 
-  isSignedIn: Ember.computed('_authToken', function() {
-    return !!this.authToken();
+  isSignedIn: Ember.computed('authToken', function() {
+    return !!this.get('authToken');
   }),
 
   signIn(email, password) {
@@ -19,7 +18,7 @@ export default Ember.Service.extend({
       variables = { email, password };
       this.get('apollo')
         .mutate({ mutation: signInUser, variables }, 'signinUser')
-        .then(result => { this.setAuthToken(result.token); })
+        .then(result => { this.set('authToken', result.token); })
         .catch(error => reject(error));
     });
   },
@@ -31,17 +30,21 @@ export default Ember.Service.extend({
     });
   },
 
-  authToken() {
-    return localStorage.getItem(GC_AUTH_TOKEN);
-  },
+  authToken: Ember.computed({
+    get(_) {
+      return localStorage.getItem(GC_AUTH_TOKEN);
+    },
+    set(_, value) {
+      if(value) {
+        localStorage.setItem(GC_AUTH_TOKEN, value);
+      } else {
+        localStorage.removeItem(GC_AUTH_TOKEN);
+      }
+      return value;
+    }
+  }),
 
   removeAuthToken() {
-    localStorage.removeItem(GC_AUTH_TOKEN);
-    this.set('_authToken', null);
-  },
-
-  setAuthToken(token) {
-    localStorage.setItem(GC_AUTH_TOKEN, token);
-    this.set('_authToken', token);
+    this.set('authToken', null);
   }
 });

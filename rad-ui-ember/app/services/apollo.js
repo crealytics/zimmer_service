@@ -12,7 +12,7 @@ export default ApolloService.extend({
     if (!req.options.headers) {
       req.options.headers = {};
     }
-    const token = this.get('auth').authToken();
+    const token = this.get('auth').get('authToken');
     req.options.headers.authorization = token ? `Bearer ${token}` : null;
     next();
   }
