@@ -31,7 +31,7 @@ export default Ember.Service.extend({
   },
 
   authToken: Ember.computed({
-    get(_) {
+    get() {
       return localStorage.getItem(GC_AUTH_TOKEN);
     },
     set(_, value) {
