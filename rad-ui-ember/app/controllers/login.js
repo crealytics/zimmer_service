@@ -1,8 +1,8 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
-  email: 'user@example.com',
-  password: 'password',
+  email: null,
+  password: null,
 
   actions: {
     signIn() {
