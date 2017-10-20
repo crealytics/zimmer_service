@@ -13,3 +13,4 @@ cache:
 
 script:
   - cd rad-ui-ember && docker-compose run tests
+
