@@ -1,0 +1,8 @@
+<div>
+  {{#if userSignedIn}}
+    {{#link-to 'bookings'}}All bookings{{/link-to}}
+    <div {{action 'logout'}}>Logout</div>
+  {{else}}
+    {{#link-to 'login'}}Login{{/link-to}}
+  {{/if}}
+</div>

@@ -1,0 +1,25 @@
+version: '3'
+services:
+  web:
+    image: danlynn/ember-cli
+    command: bash -c 'npm install && yarn start'
+    working_dir: /rad-ui
+    volumes:
+      - .:/rad-ui
+    ports:
+      - 4200:4200
+      - 49153:49153
+
+  console:
+    image: danlynn/ember-cli
+    command: /bin/bash
+    working_dir: /rad-ui
+    volumes:
+      - .:/rad-ui
+
+  tests:
+    image: danlynn/ember-cli
+    command: ember test --server
+    working_dir: /rad-ui
+    volumes:
+      - .:/rad-ui
