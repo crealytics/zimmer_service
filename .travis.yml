@@ -1,0 +1,16 @@
+sudo: required
+
+services:
+  - docker
+
+branches:
+  only:
+    - master
+
+cache:
+  directories:
+    - rad-ui-ember/node_modules
+
+script:
+  - cd rad-ui-ember && docker-compose run tests
+

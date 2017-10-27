@@ -2,7 +2,7 @@ version: '3'
 services:
   web:
     image: danlynn/ember-cli
-    command: bash -c 'npm install && yarn start'
+    command: bash -c 'yarn install && yarn start'
     working_dir: /rad-ui
     volumes:
       - .:/rad-ui
@@ -19,7 +19,7 @@ services:
 
   tests:
     image: danlynn/ember-cli
-    command: ember test --server
+    command: bash -c 'yarn install && ember test'
     working_dir: /rad-ui
     volumes:
       - .:/rad-ui
